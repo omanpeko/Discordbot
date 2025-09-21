@@ -11,8 +11,7 @@ intents.message_content = True
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 # ▼ ここにあなたのサーバーIDを入れる（数値のまま）
-# GUILD_ID = 932269784228306995
-GUILD_ID = 1131436758970671104
+GUILD_ID = 932269784228306995
 
 @bot.event
 async def on_ready():
@@ -27,8 +26,8 @@ async def ping(ctx):
 @bot.slash_command(name="ad", description="攻守ロールを表示（担当はランダム）", guild_ids=[GUILD_ID])  # 開発中はギルド登録が即時で便利
 async def ad(
     ctx,
-    you: Option(str, "あなたの名前を入力"),
-    other: Option(str, "相手の名前を入力"),
+    あなた: Option(str, "あなたの名前を入力"),
+    相手: Option(str, "相手の名前を入力"),
 ):
     # 色は固定（アタッカー＝薄い赤、ディフェンダー＝青緑）
     atk_color = discord.Color.from_rgb(255, 120, 120)  # 薄い赤
