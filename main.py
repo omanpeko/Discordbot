@@ -11,7 +11,8 @@ intents.message_content = True
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 # ▼ ここにあなたのサーバーIDを入れる（数値のまま）
-GUILD_ID = 932269784228306995
+# GUILD_ID = 932269784228306995
+GUILD_ID = 1131436758970671104
 
 @bot.event
 async def on_ready():
