@@ -23,28 +23,29 @@ async def on_ready():
 async def ping(ctx):
     await ctx.send("pong!")
 
-# ===== スラッシュコマンド /ad =====
-@bot.slash_command(name="ad", description="攻守ロールを表示", guild_ids=[GUILD_ID])
+# ===== スラッシュコマンド /ad（表示順は固定、担当だけランダム） =====
+@bot.slash_command(name="ad", description="攻守ロールを表示（担当はランダム）", guild_ids=[GUILD_ID])  # 開発中はギルド登録が即時で便利
 async def ad(
     ctx,
-    you: Option(str, "あなたの名前を入力"),     # /ad の第1引数
-    other: Option(str, "相手の名前を入力"),    # /ad の第2引数
+    you: Option(str, "あなたの名前を入力"),
+    other: Option(str, "相手の名前を入力"),
 ):
-    # Discordは“文字色指定”ができないので、色はEmbedで表現する
+    # 色は固定（アタッカー＝薄い赤、ディフェンダー＝青緑）
     atk_color = discord.Color.from_rgb(255, 120, 120)  # 薄い赤
     def_color = discord.Color.from_rgb(0, 180, 170)    # 青緑
 
-    e1 = discord.Embed(
-        description=f"**{you}** は 【アタッカー】",
-        color=atk_color
-    )
-    e2 = discord.Embed(
-        description=f"**{other}** は 【ディフェンダー】",
-        color=def_color
-    )
+    # どちらがアタッカーになるかだけランダム（表示順はアタッカー→ディフェンダーのまま）
+    if random.random() < 0.5:
+        attacker_name, defender_name = you, other
+    else:
+        attacker_name, defender_name = other, you
 
-    # みんなに見えるように（ephemeral=False が既定）
+    e1 = discord.Embed(description=f"**{attacker_name}** は 【アタッカー】",  color=atk_color)
+    e2 = discord.Embed(description=f"**{defender_name}** は 【ディフェンダー】", color=def_color)
+
+    # みんなに見える通常メッセージで返信（ephemeral=False が既定）
     await ctx.respond(embeds=[e1, e2])
+
     
 # 実行
 if __name__ == "__main__":
