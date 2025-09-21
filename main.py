@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-import os, logging, discord
+import os, logging, random, discord
 from discord.ext import commands
-from discord.commands import Option  # ← 追加（py-cordのスラッシュ引数用）
+from discord.commands import Option
 
 logging.basicConfig(level=logging.INFO)
 
