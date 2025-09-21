@@ -15,6 +15,7 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 
 @bot.event
 async def on_ready():
+    await bot.change_presence(activity=discord.Game(name="!ping"))
     logging.info(f"✅ Logged in as {bot.user} (id: {bot.user.id})")
 
 @bot.command()
