@@ -35,15 +35,14 @@ async def ping(ctx):
     await ctx.send("pong!")
 
 # =======================================================================================
-# /ad（攻守ロールを表示）: 表示順は「アタッカー→ディフェンダー」を固定、担当だけランダム
-#   - アタッカー：薄い赤
-#   - ディフェンダー：青緑
-#   - 入力した2名のどちらがどちらになるかをランダムに決定
-#   - everyone に見える通常メッセージで返信（ephemeral=False が既定）
+# /ad（攻守ロールを表示 + カスタムコード）:
+#   - 表示順は「アタッカー→ディフェンダー」を固定、担当だけランダム
+#   - アタッカー：薄い赤、ディフェンダー：青緑、カスタムコード：グレー
+#   - みんなに見える通常メッセージで返信（ephemeral=False が既定）
 # =======================================================================================
 @bot.slash_command(
     name="ad",
-    description="攻守ロールを表示（担当はランダム）",
+    description="攻守ロールを表示（担当はランダム）＋カスタムコードを添える",
     guild_ids=[GUILD_ID],  # 開発中はギルド登録が即時で便利。本番は外してグローバル化してOK
 )
 async def ad(
@@ -60,13 +59,21 @@ async def ad(
         name_localizations={"ja": "相手"},
         description_localizations={"ja": "相手の名前を入力"},
     ),
+    code: Option(
+        str,
+        "カスタムコードを入力",
+        name_localizations={"ja": "カスタムコード"},
+        description_localizations={"ja": "カスタムコードを入力"},
+    ),
 ):
     you = you.strip()
     other = other.strip()
+    code = code.strip()
 
-    # 色は固定（アタッカー＝薄い赤、ディフェンダー＝青緑）
-    atk_color = discord.Color.from_rgb(255, 120, 120)  # 薄い赤
-    def_color = discord.Color.from_rgb(0, 180, 170)    # 青緑
+    # 色は固定（アタッカー＝薄い赤、ディフェンダー＝青緑、カスタムコード＝グレー）
+    atk_color  = discord.Color.from_rgb(255, 120, 120)  # 薄い赤
+    def_color  = discord.Color.from_rgb(0, 180, 170)    # 青緑
+    code_color = discord.Color.from_rgb(145, 145, 145)  # グレー
 
     # どちらがアタッカーになるかだけランダム（表示順は固定）
     if random.random() < 0.5:
@@ -82,12 +89,13 @@ async def ad(
         description=f"**{defender_name}** は 【ディフェンダー】",
         color=def_color,
     )
+    e3 = discord.Embed(
+        description=f"カスタムコードは",
+        color=code_color,
+    )
 
-    await ctx.respond(embeds=[e1, e2])  # みんなに見える通常返信
+    await ctx.respond(embeds=[e1, e2, e3])  # みんなに見える通常返信
 
 # ---- エントリーポイント ----
 if __name__ == "__main__":
-    token = os.getenv("DISCORD_TOKEN")
-    if not token:
-        raise RuntimeError("環境変数 DISCORD_TOKEN が未設定です。Railway の Variables に設定してください。")
-    bot.run(token)
+    token = os.getenv("DIS
