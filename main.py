@@ -15,7 +15,7 @@ intents.message_content = True
 # ---- Bot 本体 ----
 bot = commands.Bot(command_prefix="!", intents=intents)
 
-# ★あなたのサーバーID（数値）に置き換えてください
+# ★あなたのサーバーID（数値）
 GUILD_ID = 932269784228306995
 
 @bot.event
@@ -43,7 +43,7 @@ async def ping(ctx):
 @bot.slash_command(
     name="ad",
     description="攻守ロールを表示（担当はランダム）＋カスタムコードを添える",
-    guild_ids=[GUILD_ID],  # 開発中はギルド登録が即時で便利。本番は外してグローバル化してOK
+    guild_ids=[GUILD_ID],  # 本番で全体公開したいときは外してOK（反映に最大1時間）
 )
 async def ad(
     ctx,
@@ -98,4 +98,7 @@ async def ad(
 
 # ---- エントリーポイント ----
 if __name__ == "__main__":
-    token = os.getenv("DIS
+    token = os.getenv("DISCORD_TOKEN")
+    if not token:
+        raise RuntimeError("環境変数 DISCORD_TOKEN が未設定です。Railway の Variables に設定してください。")
+    bot.run(token)
