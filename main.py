@@ -15,14 +15,17 @@ intents.message_content = True
 # ---- Bot 本体 ----
 bot = commands.Bot(command_prefix="!", intents=intents)
 
-# ★あなたのサーバーID（数値）
-GUILD_ID = 932269784228306995
+# ★複数サーバーID（あなたの2つを入れてあります）
+GUILD_IDS = [
+    932269784228306995,  # CYNTHIA
+    1131436758970671104, # ぺこ
+]
 
 @bot.event
 async def on_ready():
-    # ギルド限定のコマンドは即時反映できるので開発がラク
+    # ギルド限定のコマンドは即時反映（開発がラク）
     try:
-        await bot.sync_commands(guild_ids=[GUILD_ID])
+        await bot.sync_commands(guild_ids=GUILD_IDS)
     except Exception as e:
         logging.warning(f"sync_commands failed: {e}")
 
@@ -43,7 +46,7 @@ async def ping(ctx):
 @bot.slash_command(
     name="ad",
     description="攻守ロールを表示（担当はランダム）＋カスタムコードを添える",
-    guild_ids=[GUILD_ID],  # 本番で全体公開したいときは外してOK（反映に最大1時間）
+    guild_ids=GUILD_IDS,  # ←複数ギルドに即時登録
 )
 async def ad(
     ctx,
